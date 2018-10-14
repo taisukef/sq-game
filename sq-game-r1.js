@@ -564,6 +564,9 @@ window.onload = function() {
 		var vw = V_WIDTH;
 		g.translate(offx, offy);
 		g.scale(sw / vw, sw / vw);
+		g.beginPath();
+		g.rect(0, 0, vw, vw);
+		g.clip();
 		if (game.loop)
 			game.loop(g, ts, dt, vw);
 		g.restore();
