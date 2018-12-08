@@ -519,20 +519,22 @@ window.onload = function() {
 	else
 		document.body.appendChild(canvas);
 	
-	var game = {};
-	var tap = function() {
-		if (game.tap)
-			game.tap();
-	};
-	
 	var g = getContext(canvas);
+	
+	var game = {};
+	var tap = function(e) {
+		var dpr = window.devicePixelRatio;
+		var x = (e.clientX - g.offx / dpr) / (g.sw / dpr) * 1000;
+		var y = (e.clientY - g.offy / dpr) / (g.sw / dpr) * 1000;
+		if (game.tap)
+			game.tap(x, y);
+	};
 	
 	g.setFontSize = function(px) {
 		g.font = "normal " + px + "px monospace";
 	};
 	
 	var tlast = 0;
-	var sw;
 	var tick = function(ts) {
 		if (!ts)
 			ts = new Date().getTime();
@@ -553,10 +555,10 @@ window.onload = function() {
 		g.setColor(0, 0, 0);
 		g.fillRect(0, 0, gw, gh);
 		
-		sw = Math.min(gw, gh);
+		var sw = g.sw = Math.min(gw, gh);
 		g.setColor(255, 255, 255);
-		var offx = (gw - sw) / 2;
-		var offy = (gh - sw) / 2;
+		var offx = g.offx = (gw - sw) / 2;
+		var offy = g.offy = (gh - sw) / 2;
 		g.fillRect(offx, offy, sw, sw);
 		
 		g.save();
